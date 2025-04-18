@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">node-pong</string>
+    <string name="title_activity_main">node-pong</string>
+    <string name="package_name">pong.dileep.com</string>
+    <string name="custom_url_scheme">pong.dileep.com</string>
+</resources>
