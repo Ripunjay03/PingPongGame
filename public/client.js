@@ -1,6 +1,7 @@
 var host = window.location.href;
 console.log(host);
-const socket = io();
+// Explicitly connect to socket.io server on port 3001
+const socket = io('http://localhost:3001');
 
 socket.on('connect_error', (err) => {
     console.error('Socket connection error:', err);
@@ -11,10 +12,27 @@ socket.on('disconnect', (reason) => {
 });
 
 let game_state;
+let game;
+let interval;
+
+// Global KEYMAP object for keyboard state tracking
+let KEYMAP = {};
+KEYMAP[87] = false;
+KEYMAP[83] = false;
+KEYMAP[38] = false;
+KEYMAP[40] = false;
+
+// Add keyboard event listeners once globally
+document.addEventListener('keydown', function (event) {
+    KEYMAP[event.keyCode] = true;
+});
+document.addEventListener('keyup', function (event) {
+    KEYMAP[event.keyCode] = false;
+});
 
 //Changes text on searching for match page
 let i = '';
-let interval = setInterval(() => {
+let searchInterval = setInterval(() => {
 	document.getElementById('searching-for-match').innerHTML =
 		'Searching for Match' + i;
 	i += '.';
@@ -102,41 +120,28 @@ function setUsername() {
 
 //Single Player vs CPU
 function singlePlayer() {
-	//Controls
-	//Keyboard
-	let KEYMAP = {};
-	KEYMAP[87] = false;
-	KEYMAP[83] = false;
-	KEYMAP[38] = false;
-	KEYMAP[40] = false;
-	document.addEventListener('keydown', function (event) {
-		KEYMAP[event.keyCode] = true;
-	});
-	document.addEventListener('keyup', function (event) {
-		KEYMAP[event.keyCode] = false;
-	});
+	clearInterval(interval);
 	game = new Game(
 		0,
 		2,
 		1,
 		4
-	)
+	);
 	game_state = new Pong(
 		"Player One",
 		1,
 		"Player Two",
 		[50, 50]
 	);
-	clearInterval(interval);
 	interval = setInterval(() => {
 		if (KEYMAP[87] || KEYMAP[38]) game_state.upSelf();
 		if (KEYMAP[83] || KEYMAP[40]) game_state.downSelf();
 		game_state.update();
 		game.update();
 		game_state.game.self.score = game.players[0].score;
-		game.players[0].pos = game_state.game.self.pos
+		game.players[0].pos = game_state.game.self.pos;
 		game_state.game.opp.score = game.players[1].score;
-		game.players[1].pos = game_state.game.opp.pos
+		game.players[1].pos = game_state.game.opp.pos;
 		game_state.game.ball = game.ball;
 		if (game_state.game.opp.pos < game_state.game.ball[1]) game_state.game.opp.pos += 0.65;
 		if (game_state.game.opp.pos > game_state.game.ball[1]) game_state.game.opp.pos -= 0.65;
@@ -149,32 +154,19 @@ function singlePlayer() {
 
 //Two Player 1v1
 function oneVerseOne() {
-	//Controls
-	//Keyboard
-	let KEYMAP = {};
-	KEYMAP[87] = false;
-	KEYMAP[83] = false;
-	KEYMAP[38] = false;
-	KEYMAP[40] = false;
-	document.addEventListener('keydown', function (event) {
-		KEYMAP[event.keyCode] = true;
-	});
-	document.addEventListener('keyup', function (event) {
-		KEYMAP[event.keyCode] = false;
-	});
+	clearInterval(interval);
 	game = new Game(
 		0,
 		2,
 		1,
 		4
-	)
+	);
 	game_state = new Pong(
 		"Player One",
 		1,
 		"Player Two",
 		[50, 50]
 	);
-	clearInterval(interval);
 	interval = setInterval(() => {
 		if (KEYMAP[87]) game_state.upSelf();
 		if (KEYMAP[83]) game_state.downSelf();
@@ -183,9 +175,9 @@ function oneVerseOne() {
 		game_state.update();
 		game.update();
 		game_state.game.self.score = game.players[0].score;
-		game.players[0].pos = game_state.game.self.pos
+		game.players[0].pos = game_state.game.self.pos;
 		game_state.game.opp.score = game.players[1].score;
-		game.players[1].pos = game_state.game.opp.pos
+		game.players[1].pos = game_state.game.opp.pos;
 		game_state.game.ball = game.ball;
 	}, (1 / 60) * 1000);
 
@@ -233,9 +225,10 @@ function touchHandler(e) {
 
 // Quit game and return to start screen
 function quitGame() {
-	if (socket) {
-		socket.disconnect();
-	}
+	// Do not disconnect socket to allow switching options without restart
+	// if (socket) {
+	// 	socket.disconnect();
+	// }
 	clearInterval(interval);
 	game_state = null;
 	document.getElementById('gameplay').style.display = 'none';
