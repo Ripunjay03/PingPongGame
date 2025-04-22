@@ -12,7 +12,7 @@ body {
 h1 {
 	margin: 0;
 	height: 10vh;
-	font-size: 50px;
+	font-size: 5vw;
 	text-align: center;
 }
 
@@ -20,13 +20,13 @@ h1 {
 	right: 10px;
 }
 #ping {
-	font-size: 15px;
+	font-size: 3vw;
 	top: 30px;
 	left: 10px;
 }
 
 #github-link {
-	font-size: 15px;
+	font-size: 3vw;
 	color: white;
 	left: 10px;
 }
@@ -38,40 +38,51 @@ h1 {
 h2 {
 	position: absolute;
 	top: 10px;
-	font-size: 24px;
+	font-size: 4vw;
 }
 
 #start-screen {
 	position: absolute;
 	text-align: center;
-	font-size: 32px;
+	font-size: 4vw;
 	top: 50%;
 	left: 50%;
-	margin-top: -125px;
-	margin-left: -250px;
-	width: 500px;
-	height: 250px;
+	margin-top: -20vh;
+	margin-left: -25vw;
+	width: 50vw;
+	height: 40vh;
+}
+
+.menu-button {
+	margin-top: 1.5vw;
+	padding: 1vw 2vw;
+	width: 50vw;
+	border-radius: 2vw;
+	background-color: black;
+	color: white;
+	border: 0.3vw solid white;
+	transition-duration: 0.3s;
 }
 
 #input-username[type='text'] {
 	background-color: black;
-	border: 5px solid white;
+	border: 0.5vw solid white;
 	color: white;
 	text-align: center;
-	font-size: 32px;
-	width: 460px;
-	padding: 10px 15px;
-	border-radius: 4px;
+	font-size: 5vw;
+	width: 46vw;
+	padding: 1vw 1.5vw;
+	border-radius: 0.4vw;
 }
 
 .menu-button {
-	margin-top: 5px;
-	padding: 10px 20px;
-	width:500px;
-	border-radius: 20px;
+	margin-top: 0.5vw;
+	padding: 1vw 2vw;
+	width: 50vw;
+	border-radius: 2vw;
 	background-color: black;
 	color: white;
-	border: 3px solid white;
+	border: 0.3vw solid white;
 	transition-duration: 0.3s;
 }
 
@@ -84,13 +95,13 @@ h2 {
 #match-making {
 	position: absolute;
 	text-align: center;
-	font-size: 32px;
+	font-size: 5vw;
 	top: 50%;
 	left: 50%;
-	margin-top: -125px;
-	margin-left: -275px;
-	width: 550px;
-	height: 250px;
+	margin-top: -12.5vh;
+	margin-left: -27.5vw;
+	width: 55vw;
+	height: 25vh;
 }
 
 #gameplay {
@@ -106,8 +117,22 @@ h2 {
 	}
 }
 
+@media (max-width: 600px) {
+	h1 {
+		font-size: 8vw;
+	}
+	#start-screen, #match-making {
+		width: 90vw;
+		margin-left: -45vw;
+	}
+	#input-username[type='text'], .menu-button {
+		width: 90vw;
+		font-size: 6vw;
+	}
+}
+
 #drawing-canvas {
 	touch-action: none;
-	border: 5px white solid;
+	border: 0.5vw white solid;
 	cursor: none;
 }

@@ -2,6 +2,14 @@ var host = window.location.href;
 console.log(host);
 const socket = io();
 
+socket.on('connect_error', (err) => {
+    console.error('Socket connection error:', err);
+});
+
+socket.on('disconnect', (reason) => {
+    console.warn('Socket disconnected:', reason);
+});
+
 let game_state;
 
 //Changes text on searching for match page
@@ -69,10 +77,17 @@ function fit_canvas() {
 
 //Sends username to server
 function setUsername() {
+	const username = document.getElementById('input-username').value;
+	console.log('Attempting to set username:', username);
+	if (!username || username.trim() === '') {
+		window.alert('Username cannot be empty.');
+		return;
+	}
 	socket.emit(
 		'set-username',
-		document.getElementById('input-username').value,
+		username,
 		callback => {
+			console.log('set-username callback:', callback);
 			if (callback) {
 				document.getElementById('start-screen').remove();
 				console.log('username changed successfully');

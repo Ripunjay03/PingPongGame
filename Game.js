@@ -11,7 +11,7 @@ class Game {
 		this.player2 = id2;
 		this.players = {};
 		this.players[id] = { name: username.toString(), pos: 50, score: 0 };
-		this.players[id2] = { name: username.toString(), pos: 50, score: 0 };
+		this.players[id2] = { name: username2.toString(), pos: 50, score: 0 };
 		this.ball = [20, 50];
 		this.ball_velocity = [MIN_SPEED, 0];
 	}

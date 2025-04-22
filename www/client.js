@@ -1,6 +1,46 @@
-var host = window.location.href;
-console.log(host);
-var socket = io.connect(host);
+/**
+ * To support connecting to backend server on a different IP address for Capacitor Android app,
+ * we allow specifying the backend server IP via a global variable or prompt.
+ * 
+ * Usage:
+ * - Set window.backendServerIp to the IP address of the backend server (e.g. "192.168.1.100")
+ * - If not set, fallback to window.location.hostname
+ */
+
+var backendServerIp = window.backendServerIp || window.localStorage.getItem('backendServerIp') || null;
+
+function getSocketServerUrl() {
+    if (backendServerIp) {
+        return "http://" + backendServerIp + ":3000";
+    } else {
+        return "http://" + window.location.hostname + ":3000";
+    }
+}
+
+var socketServerUrl = getSocketServerUrl();
+
+// Detect if running in Capacitor Android environment
+if (window.Capacitor && window.Capacitor.isNative) {
+    var socket = io.connect(socketServerUrl);
+} else {
+    var host = window.location.href;
+    var socket = io.connect(host);
+}
+
+// For debugging
+console.log("Socket connected to:", socketServerUrl);
+
+// Optional: Prompt user to enter backend server IP if running in Capacitor and no IP configured
+if (window.Capacitor && window.Capacitor.isNative && !backendServerIp) {
+    setTimeout(() => {
+        let ip = prompt("Enter backend server IP address (e.g. 192.168.1.100):");
+        if (ip) {
+            window.backendServerIp = ip;
+            window.localStorage.setItem('backendServerIp', ip);
+            alert("Please restart the app to connect to the backend server at " + ip);
+        }
+    }, 1000);
+}
 
 let game_state;
 
